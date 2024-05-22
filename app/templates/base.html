@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'webfonts/all.css'%}">
+    <title>Асосӣ</title>
+    <style>
+        nav{
+            background: url({% static "/images/123456.png" %});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        } 
+        body{
+            background-color: #f5f5f5;
+        }
+        .category:hover{
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+        .posts:hover{
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; padding: 26px;
+        }
+        .bipurs:hover{
+            color: aqua;
+        }
+        .item2 {
+            height: 68vh; /* Set height to enable scrolling */
+            overflow-y: scroll;
+        }
+
+    </style>
+</head>
+<body>
+    <nav style="background: url(% static '/images/123456.png'%)">
+        <a href="{% url 'home' %}" style="display: flex; align-items: center; padding-left: 50px; gap: 20px;"><img src="{% static "/images/6.png" %}" style="width: 10%; padding: 20.5 px 0px; padding-left: 70px;" alt=""> <img style="width: 20%; padding-left: 50px;" src="{% static "/images/4.png" %}" alt=""></a>
+        
+    </nav>
+    <div class="search-bar">
+        <div class="search-conteiner">
+            <form method="POST" action="{% url 'search-questioin' %}" style="display: flex; width: 80%;">
+            {% csrf_token %}
+            <input type="search" name="searched" class="search-input" placeholder="Ҷустуҷӯ" aria-label="Search">
+            <button class="btn-search">Ҷустуҷӯ</button></form>
+        </div>
+        <div class="autheticate-container">
+            {% if request.user.is_authenticated%}
+            <div style="display: flex; gap: 15px; align-items: center;">
+        <p style="font-size: 20px;">{{request.user}}</p>
+        <a style="text-decoration: none; color: white; padding: 10px 20px; background-color: #4CAF50; border-radius: 5px;" href="{% url 'logout' %}">Баромадан</a>
+    </div>
+        {% else %}
+        <a href="{% url 'login' %}" class="login">Даромадан</a>
+        {% endif %}
+        </div>
+    </div>
+    <div class="main-container" style="gap: 10px; padding-top: 10px; position: relative;">
+
+        <div class="item1" style="background-color: white; padding: 26px; width: 20%; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 0px 10px 0px 0px;">
+            <h2 style="color: black; font-size: 30px; padding-left: 5px;">Категорияҳо</h2>
+            <ul style="padding: 0;">
+                {% for category in category_list %}
+                    <li class="category" style="list-style-type: none; padding: 10px 5px;"><a style="text-decoration: none; color: black; font-size: 28px;" href="{% url 'category_detail' pk=category.id %}">{{ category }}</a></li> 
+
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="item2" style="width: 60%; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; padding: 26px; background-color: white; border-radius: 10px;">
+            <ul style="padding: 0;">
+                {% for post in post_list %}
+                    <li class="posts" style="border: 1px solid black; list-style-type: none; padding: 15px 15px; margin: 10px 0px; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="{% url 'post_detail' pk=post.id %}" style="font-size: 29px; padding: 5px 0px; text-decoration: none; color: black;">{{ post.title }}</a>
+                        {% if user in post.likes.all%}
+                        <p>{{ post.number_of_likes }}<a href="{% url 'post-likes' pk=post.id %}" style="text-decoration: none; "> <i class="fa-solid fa-heart" style="color: #4CAF50;"></i></a></p>
+                        {% else %}
+                        <p>{{ post.number_of_likes }}<a href="{% url 'post-likes' pk=post.id %}" style="text-decoration: none; "> <i class="fa-regular fa-heart" style="color: #4CAF50;"></i></a></p>
+                        {% endif %}
+                    </div><br>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <button style="margin: 10px 0px; border: none; text-decoration: none; color: white; background-color: #4CAF50; padding: 5px 8px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; "><a style="color: white; text-decoration: none;" href="{% url 'create_answer' pk=post.id %}">Посух додан</a></button>
+                        <p>({{ post.user }}) {{ post.date_created|date:"d/m/Y" }}</p>
+                    </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+        <div class="item3" style="background-color: white; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; text-align: center; display:flex; width: 20%; justify-content: center; align-items: center; border-radius: 10px 0px 0px 0px;">
+            <div>
+                <h1 style="padding: 50px 0px;">Шумо савол доред?</h1>
+                <a class="bipurs" style="text-decoration: none; color: white; padding: 10px 50px; background-color: #4CAF50; border-radius: 5px; font-size: 40px;" href="{% url 'post_create' %}">Бипурсед</a>
+                <p style="padding: 0px 35px; padding-top: 40px; font-size: 27px; text-align:justify;"><span style="font-size: 30px ;">juyo.tj</span> маркази онлайнӣ барои пайваст намудани мутахассисони соҳаҳои гуногун бо донишомӯзони ҷавон. </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

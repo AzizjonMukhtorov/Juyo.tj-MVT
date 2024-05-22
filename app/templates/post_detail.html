@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<style>
+  .container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* text-align: center; */
+    margin-top: 20px;
+  }
+  h1 {
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
+  .item-one {
+    border: 1px solid black;
+    margin: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  .item-one:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 26px;
+  }
+  .answers-container {
+    margin-top: 20px;
+  }
+  .answer-item {
+    border: 1px solid black;
+    margin: 10px 0px;
+    border-radius: 10px;
+    padding: 10px;
+    list-style-type: none;
+  }
+  .answer-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  .answer-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: gray;
+  }
+</style>
+
+<div class="container">
+  <div class="item-one">
+    <div>
+      <p style="padding: 8px 0px; font-size: 29px">Савол: {{ post.title }}</p>
+      <p style="font-size: 29px">Шарҳи савол: {{ post.content }}</p>
+      <button style="margin: 10px 0px; border: none; text-decoration: none; color: white; background-color: #4CAF50; padding: 5px 8px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; "><a style="color: white; text-decoration: none;" href="{% url 'create_answer' pk=post.id %}">Посух додан</a></button>
+      {% if post.image %}
+      <p><img src="{{ post.image.url }}" alt="Post Image" /></p>
+      {% endif %}
+    </div>
+    <div>
+    <p style="font-size: 20px">Саволдиҳанда: {{ post.user }}</p>
+    <p style="font-size: 20px">Шумораи посухҳо : {{ answer_count }}</p>
+    <p style="font-size: 20px"><i class="fa-solid fa-heart" style="color: #4CAF50;"></i> : {{ post_likes }}</p>
+    </div>
+    
+  </div>
+
+  <h2>Посухҳо:</h2>
+  <div class="answers-container">
+    {% for answer in related_answers %}
+    <ul class="answer-item">
+      <div style="display: flex; justify-content: space-between;">
+        <li>{{ answer.content }}</li>
+        <p>
+          {% with answer_likes|get_item:answer.id as likes_count %}
+            {{ likes_count }}
+          {% endwith %}
+          <a href="{% url 'answer-likes' pk=answer.id %}" style="text-decoration: none;">
+            {% if user in answer.likes.all %}
+              <i class="fa-solid fa-heart" style="color: #4CAF50;"></i>
+            {% else %}
+              <i class="fa-regular fa-heart" style="color: #4CAF50;"></i>
+            {% endif %}
+          </a>
+        </p>
+      </div>
+
+      {% if answer.image %}
+      <li><img src="{{ answer.image.url }}" alt="Answer Image" /></li>
+      {% endif %}
+      <div class="answer-details">
+        <span>{{ answer.user }}</span>
+        <span>{{ answer.date_created|date:"d/m/Y" }}</span>
+      </div>
+    </ul>
+    {% empty %}
+    <p>No related answers found.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Воридшавӣ</title>
+    <style>
+        #id_username{
+            width: 50%;
+            border-radius: 10px;
+            padding: 10px 8px;
+        }
+        #id_password{
+            width: 50%;
+            border-radius: 10px;
+            padding: 10px 8px;
+        }
+        body{
+            background: url(% static 'images/Душанбе.jpg' %)
+        }
+    </style>
+</head>
+    <body style="margin:auto; background: url(% static 'images/Душанбе.jpg'; %)">
+    <div class="container" style="text-align: center; margin-top: 200px;">
+        <h1 style="margin-bottom: 20px; color: #333;">Воридшавӣ</h1>
+        <form method="post" style="width: 25%; display: inline-block; padding: 20px; border: 1px solid #333; border-radius: 8px;">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label for="id_username" style="font-weight: bold; color: #333;">Логин:</label><br>
+                {{ form.username }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="id_password" style="font-weight: bold; color: #333;">Парол:</label><br>
+                {{ form.password }}
+            </div>
+            <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px;">Даромадан</button>
+            <p>Холо худро ба қайд нагирифтед? <a href="{% url 'registration' %}" style="text-decoration: none; color: gray;">Бақайдгирӣ</a></p>
+        </form>
+    
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if searched and not search_result %}
+        <p>No posts found for "{{ searched }}".</p>
+        {% endif %}
+        <ul style="padding: 0;">
+                {% for post in search_result %}
+                    <li style="border: 1px solid black; list-style-type: none; padding: 15px 15px; margin: 10px 0px; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="{% url 'post_detail' pk=post.id %}" style="font-size: 29px; padding: 5px 0px; text-decoration: none; color: black;">{{ post.title }}</a>
+                        <p>{{ post.likes_count }} <i class="fa-solid fa-heart" style="color: #4CAF50;"></i></p>
+                        </div><br>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <button style="margin: 10px 0px; border: none; text-decoration: none; color: white; background-color: #4CAF50; padding: 5px 8px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; "><a style="color: white; text-decoration: none;" href="{% url 'create_answer' pk=post.id %}">Посух додан</a></button>
+                        <p>{{ post.date_created|date:"d/m/Y" }}</p>
+                    </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+
+{% endblock content %}

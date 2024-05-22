@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  h1 {
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
+  .item-one {
+    border: 1px solid black;
+    margin: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  .item-one:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 26px;
+  }
+  .answers-container {
+    margin-top: 20px;
+  }
+  .answer-item {
+    border: 1px solid black;
+    margin: 10px 0px;
+    border-radius: 10px;
+    padding: 10px;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .answer-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  .answer-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: gray;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  a:hover {
+    color: #007BFF; /* Change the color to your preference */
+  }
+  a:visited {
+    color: inherit; /* Ensure link color does not change after being clicked */
+  }
+</style>
+
+<div class="container">
+  <div class="item-one">
+    <div>
+      <p style="padding: 8px 0px; font-size: 29px">Категория: {{ category.category_name }}</p>
+    </div>
+    <div>
+      <p style="font-size: 20px">Шумораи саволҳо: {{ post_count }}</p>
+    </div>
+  </div>
+
+  <h2>Саволҳо:</h2>
+  <div class="answers-container">
+    <ul style="list-style-type: none; padding: 0;">
+      {% for post in related_posts %}
+        <li class="answer-item">
+          <a href="{% url 'post_detail' pk=post.id %}">{{ post.title }}</a>
+          <button style="margin: 10px 0px; border: none; text-decoration: none; color: white; background-color: #4CAF50; padding: 5px 8px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; "><a style="color: white; text-decoration: none;" href="{% url 'create_answer' pk=post.id %}">Посух додан</a></button>
+
+        </li>
+      {% empty %}
+        <li class="answer-item">Ин категория ҳоло савол надоранд.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock content %}
